@@ -49,6 +49,7 @@ getgenv().Aiming = {
     VisibleCheck = false,
     
     HitChance = 100,
+    Anti_Ground_Shots = false,
 
     Selected = nil,
     SelectedPart = nil,
@@ -438,6 +439,16 @@ function Aiming.GetClosestPlayerToCursor()
     Aiming.Selected = ClosestPlayer
     Aiming.SelectedPart = TargetPart
 end
+
+task.spawn(function()
+    if Aiming.Anti_Ground_Shots and Aiming.Character[Aiming.TargetPart].Velocity.Y < -15 then
+        pcall(function()
+            local Target = Aiming.Character[Aiming.TargetPart]
+            Target.Velocity = Vector3.new(Target.Velocity.X, (Target.Velocity.Y / 5), Target.Velocity.Z)
+            Target.AssemblyLinearVelocity = Vector3.new(Target.Velocity.X, (Target.Velocity.Y / 5), Target.Velocity.Z)
+        end)
+    end
+end)
 
 -- // Heartbeat Function
 Heartbeat:Connect(function()
